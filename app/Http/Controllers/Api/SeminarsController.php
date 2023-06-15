@@ -83,9 +83,14 @@ class SeminarsController extends Controller
     
     // Add the user as a participant
     $participants[] = $user->id;
+    $user = User::find($user->id);
     $seminar->update([
         'participants' => json_encode($participants),
         'participant_count' => count($participants)
+    ]);
+    
+    $user->update([
+        'seminar_applied' => $seminar->id
     ]);
     
     return response()->json(['message' => 'Seminar Applied'], 200);
