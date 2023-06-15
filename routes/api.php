@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\LogoutController;
 use App\Http\Controllers\Api\UserController;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -33,3 +34,12 @@ Route::post('/logout', App\Http\Controllers\Api\LogoutController::class)->name('
 //gwt thw uawe controllwe
 // Route::get('/user', 'App\Http\Controllers\Api\UserController@show')->name('user');
 Route::post('/user', App\Http\Controllers\Api\UserController::class)->name('user');
+// Route::get('/seminars', App\Http\Controllers\Api\SeminarsController::class)->name('index');]\
+
+//Seminar api
+use App\Http\Controllers\Api\SeminarsController;
+Route::get('/seminars/upcoming', [SeminarsController::class, 'upcoming_seminar']);
+Route::get('/seminars/past', [SeminarsController::class, 'past_seminar']);
+Route::post('/seminars', 'App\Http\Controllers\Api\SeminarsController@store');
+Route::delete('/seminars/{seminar}', 'App\Http\Controllers\Api\SeminarsController@destroy');
+Route::post('/seminars/{seminar}/apply', 'App\Http\Controllers\Api\SeminarsController@apply');
