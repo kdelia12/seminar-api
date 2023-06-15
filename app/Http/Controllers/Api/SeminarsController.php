@@ -11,7 +11,9 @@ class SeminarsController extends Controller
 {
     public function upcoming_seminar()
     {
-        $seminars = Seminar::where('date_and_time', '>', now())->get();
+        // $seminars = Seminar::where('date_and_time', '>', now())->get();
+        //take all seminars without participants data
+        $seminars = Seminar::where('date_and_time', '>', now())->select('id', 'name', 'short_description', 'full_description', 'date_and_time', 'quota', 'participant_count', 'speaker')->get();
 
         return response()->json($seminars, 200);
     }
