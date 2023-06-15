@@ -1,0 +1,24 @@
+name: seminar-api
+services:
+  - name: web
+    environment_slug: php
+    github:
+      branch: main
+    build_command: composer install --no-dev
+    run_command: /start.sh
+    env:
+      APP_NAME: seminar-api
+      APP_ENV: production
+      APP_KEY: ${APP_KEY}
+      APP_DEBUG: false
+      APP_URL: ${APP_URL}
+      LOG_CHANNEL: stack
+      DB_CONNECTION: mysql
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    routes:
+      - path: /
+        destination: web
