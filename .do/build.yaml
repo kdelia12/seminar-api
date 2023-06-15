@@ -23,3 +23,4 @@ services:
       - path: /
         destination: web
     run_command: heroku-php-apache2 public/
+
