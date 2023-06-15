@@ -43,3 +43,6 @@ Route::get('/seminars/past', [SeminarsController::class, 'past_seminar']);
 Route::post('/seminars', 'App\Http\Controllers\Api\SeminarsController@store');
 Route::delete('/seminars/{seminar}', 'App\Http\Controllers\Api\SeminarsController@destroy');
 Route::post('/seminars/{seminar}/apply', 'App\Http\Controllers\Api\SeminarsController@apply');
+Route::get('/seminars/applied', 'App\Http\Controllers\Api\SeminarsController@get_all_seminar_applied');
+Route::get('/seminars/{seminar}', 'App\Http\Controllers\Api\SeminarsController@get_all_seminar_applicant');
+Route::get('/seminars/{seminar}/check', 'App\Http\Controllers\Api\SeminarsController@check_apply');

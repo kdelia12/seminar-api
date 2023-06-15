@@ -56,8 +56,7 @@ class SeminarsController extends Controller
         return response()->json(['message' => 'Seminar deleted'], 200);
     }
 
-    public function apply(Seminar $seminar, Request $request)
-{
+    public function apply(Seminar $seminar, Request $request){
     $user = auth()->guard('api')->user();
     if (!$user) {
         return response()->json(['error' => 'Unauthorized'], 401);
@@ -95,4 +94,79 @@ class SeminarsController extends Controller
     
     return response()->json(['message' => 'Seminar Applied'], 200);
 }
+
+public function get_all_seminar_applied(){
+    // Retrieve the user ID from the bearer token
+    $user = auth()->guard('api')->user();
+
+    // Retrieve the user with the given ID
+    $user = User::find($user->id);
+
+    // Check if the user exists
+    if (!$user) {
+        return response()->json(['error' => 'User not found'], 404);
+    }
+
+    // Retrieve the applied seminar data from the user's record
+    $seminar_applied = json_decode($user->seminar_applied, true);
+    // $seminar_name = Seminar::find($seminar_applied)->name;
+    $seminars = [];
+    foreach ($seminar_applied as $seminarId) {
+        $seminar = Seminar::find($seminarId);
+        if ($seminar) {
+            $seminars[] = [
+                'seminar_id' => $seminarId,
+                'seminar_name' => $seminar->name
+            ];
+        }
+    }
+
+    // Check if the seminar data is empty
+    if (!$seminar_applied) {
+        return response()->json(['message' => 'No seminar data found'], 200);
+    }
+
+    // Return the seminar data as a JSON response
+    return response()->json(['seminars' => $seminars], 200);
+}
+
+public function get_all_seminar_applicant(Seminar $seminar){
+    // Retrieve the user ID from the bearer token
+    $user = auth()->guard('api')->user();
+
+    if (!$user || $user->role !== 'admin') {
+        return response()->json(['error' => 'Unauthorized'], 401);
+    }
+
+    
+    $participants = json_decode($seminar->participants, true) ?? [];
+    $applicants =[];
+    foreach ($participants as $participantId) {
+        $participant = User::find($participantId);
+        if ($participant) {
+            $applicants[] = [
+                'participant_id' => $participantId,
+                'participant_name' => $participant->name,
+                'participant_phone' => $participant->no_hp,
+            ];
+        }
+    }
+    return response()->json(['applicants' => $applicants], 200);
+}
+
+public function check_apply(Seminar $seminar ){
+
+    $user = auth()->guard('api')->user();
+    $participants = json_decode($seminar->participants, true) ?? [];
+    $user = auth()->guard('api')->user();
+    if (!$user) {
+        return response()->json(['error' => 'Unauthorized'], 401);
+    }
+    if (in_array($user->id, $participants)) {
+        return response()->json(['message' => 'Anda Sudah Mendaftar'], 200);
+    }
+
+    return response()->json(['message' => 'Anda belum mendaftar'], 200);
+}
+
 }
