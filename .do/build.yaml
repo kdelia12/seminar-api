@@ -1,9 +1,9 @@
 name: seminar-api
 services:
-  - name: web
-    environment_slug: php
-    github:
+  - environment_slug: php
+    git:
       branch: main
+      repo_clone_url: https://github.com/kdelia12/seminar-api.git
     build_command: composer install --no-dev
     run_command: /start.sh
     env:
@@ -22,3 +22,4 @@ services:
     routes:
       - path: /
         destination: web
+    run_command: heroku-php-apache2 public/
