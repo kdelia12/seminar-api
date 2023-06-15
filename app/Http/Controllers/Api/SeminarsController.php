@@ -90,7 +90,7 @@ class SeminarsController extends Controller
     ]);
     
     $user->update([
-        'seminar_applied' => $seminar->id
+        'seminar_applied' => json_encode($seminar->id)
     ]);
     
     return response()->json(['message' => 'Seminar Applied'], 200);
