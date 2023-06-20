@@ -46,3 +46,8 @@ Route::post('/seminars/{seminar}/apply', 'App\Http\Controllers\Api\SeminarsContr
 Route::get('/seminars/applied', 'App\Http\Controllers\Api\SeminarsController@get_all_seminar_applied');
 Route::get('/seminars/{seminar}', 'App\Http\Controllers\Api\SeminarsController@get_all_seminar_applicant');
 Route::get('/seminars/{seminar}/check', 'App\Http\Controllers\Api\SeminarsController@check_apply');
+
+Route::post('/ratings/add', 'App\Http\Controllers\Api\RatingsController@addratings');
+Route::get('/seminars/{id_seminar}/stars', 'App\Http\Controllers\Api\RatingsController@getseminarstars');
+Route::get ('/user/{id_seminar}/stars', 'App\Http\Controllers\Api\RatingsController@getuserstars');
+
