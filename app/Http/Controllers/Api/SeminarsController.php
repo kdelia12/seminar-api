@@ -125,7 +125,10 @@ public function get_all_seminar_applied(){
         if ($seminar) {
             $seminars[] = [
                 'seminar_id' => $seminarId,
-                'seminar_name' => $seminar->name
+                'seminar_name' => $seminar->name,
+                'seminar_shortdesc' => $seminar->short_description,
+                'seminar_speaker' => $seminar->speaker,
+                'seminar_time' => $seminar->date_and_time,
             ];
         }
     }
