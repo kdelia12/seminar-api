@@ -182,4 +182,27 @@ public function check_apply(Seminar $seminar ){
     return response()->json(['message' => 'Anda belum mendaftar'], 200);
 }
 
+public function getseminardata (Seminar $seminar){
+    if (!$seminar) {
+        return response()->json(['error' => 'Seminar not found'], 404);
+    }
+    $seminar = Seminar::find($seminar->id);
+    $seminar = [
+        'id' => $seminar->id,
+        'name' => $seminar->name,
+        'short_description' => $seminar->short_description,
+        'full_description' => $seminar->full_description,
+        'date_and_time' => $seminar->date_and_time,
+        'quota' => $seminar->quota,
+        'participant_count' => $seminar->participant_count,
+        'speaker' => $seminar->speaker,
+        'category' => $seminar->category,
+        'lokasi' => $seminar->lokasi,
+        'alamat' => $seminar->alamat,
+    ];
+    return response()->json(['seminar' => $seminar], 200);
+
+}
+
+
 }
