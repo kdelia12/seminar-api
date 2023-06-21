@@ -40,6 +40,8 @@ class SeminarsController extends Controller
             'quota' => ['required', 'integer'],
             'date_and_time' => ['required', 'date'],
             'speaker' => ['required', 'string'],
+            'category' => ['required', 'string'],
+
         ]);
     
         $seminar = Seminar::create($validatedData);
@@ -64,6 +66,11 @@ class SeminarsController extends Controller
         return response()->json(['error' => 'Unauthorized'], 401);
     }
     
+    //check if user have no ktp number cant apply
+    if (!$user->no_KTP) {
+        return response()->json(['error' => 'Please fill your KTP number'], 400);
+    }
+
     // Check if seminar is already past
     if ($seminar->date_and_time < now()) {
         return response()->json(['error' => 'Seminar is closed'], 400);

@@ -14,6 +14,10 @@ class Seminar extends Model
         'date_and_time',
         'quota',
         'participant_count',
-        'speaker'
+        'speaker',
+        'category',
+        'lokasi',
+        'alamat',
+
     ];
 }
