@@ -115,9 +115,15 @@ public function get_all_seminar_applied(){
     if (!$user) {
         return response()->json(['error' => 'User not found'], 404);
     }
-
     // Retrieve the applied seminar data from the user's record
     $seminar_applied = json_decode($user->seminar_applied, true);
+
+    // Check if the seminar data is empty
+    if (!$seminar_applied) {
+        return response()->json(['message' => 'No seminar data found'], 200);
+    }
+
+
     // $seminar_name = Seminar::find($seminar_applied)->name;
     $seminars = [];
     foreach ($seminar_applied as $seminarId) {
@@ -128,14 +134,9 @@ public function get_all_seminar_applied(){
                 'seminar_name' => $seminar->name,
                 'seminar_shortdesc' => $seminar->short_description,
                 'seminar_speaker' => $seminar->speaker,
-                'seminar_time' => $seminar->date_and_time,
+                'seminar_date' => $seminar->date_and_time,
             ];
         }
-    }
-
-    // Check if the seminar data is empty
-    if (!$seminar_applied) {
-        return response()->json(['message' => 'No seminar data found'], 200);
     }
 
     // Return the seminar data as a JSON response
