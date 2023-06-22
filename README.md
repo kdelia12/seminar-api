@@ -97,7 +97,7 @@
 * URL
     - ```/user/editprofile```
 * Method
-    - POST
+    - PUT
 * Headers
     - ``Authorization`` : ``Bearer <token>``
 * Request Body
