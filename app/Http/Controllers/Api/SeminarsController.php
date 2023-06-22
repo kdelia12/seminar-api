@@ -224,5 +224,19 @@ public function editseminar(Request $request, Seminar $seminar){
     return response()->json(['message' => 'Seminar Updated'], 200);
 }
 
-
+public function finalizeseminar (Seminar $seminar){
+    $user = auth()->guard('api')->user();
+    if (!$user || $user->role !== 'admin') {
+        return response()->json(['error' => 'Unauthorized'], 401);
+    }
+    if ($seminar->finalized == 'Y') {
+        return response()->json(['error' => 'Seminar Sudah Di finalisasi'], 401);
+    }
+    if ($seminar->date_and_time > now()) {
+        return response()->json(['error' => 'Seminar Belum Berakhir'], 401);
+    }
+    $seminar->finalized = 'Y';
+    $seminar->save();
+    return response()->json(['message' => 'Seminar Berhasil Di finalisasi'], 200);
+}
 }

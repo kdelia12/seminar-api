@@ -351,22 +351,19 @@
 }
 ```
 
-## Add Review
+## Finalize Seminar
 * URL
-    - ```/ratings/add```
+    - ```/seminars/{seminarid}/finalize```
 * Method
-    - GET
+    - POST
 * Headers
     - ``Authorization`` : ``Bearer <token>``
-* Request Body
-    - ``id_seminar`` 
-    - ``stars``
-    - ``review``
 * Response
 ```json
 {
-    "average_rating": 5
+    "message": "Seminar Finalized"
 }
+
 ```
 ## Add Review
 * URL
@@ -384,4 +381,42 @@
 {
     "average_rating": 5
 }
+```
+
+## Generate Sertifikat
+* URL
+    - ```/sertifikat/generate/{seminarid}```
+* Method
+    - POST
+* Headers
+    - ``Authorization`` : ``Bearer <token>``
+* Response
+```json
+{
+    "message": "Sertifikat data generated"
+}
+
+```
+
+## Show and Validasi Sertifikat
+* URL
+    - ```/sertifikat/generate/{seminarid}```
+* Method
+    - POST
+* Headers
+    - ``Authorization`` : ``Bearer <token>``
+* Request Body
+    - ``kode_sertifikat`` 
+* Response
+```json
+{
+    {
+    "nama": "Wildan Pertamax",
+    "seminarname": "Introduction to nuxt js",
+    "seminardate": "2023-05-27 20:00:00",
+    "seminarspeaker": "Hitomim Tanaka",
+    "message": "Sertifikat Valid"
+}
+}
+
 ```

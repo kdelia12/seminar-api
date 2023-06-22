@@ -47,6 +47,7 @@ Route::get('/seminars/applied', 'App\Http\Controllers\Api\SeminarsController@get
 Route::get('/seminars/{seminar}', 'App\Http\Controllers\Api\SeminarsController@get_all_seminar_applicant');
 Route::get('/seminars/{seminar}/check', 'App\Http\Controllers\Api\SeminarsController@check_apply');
 Route::get('/seminars/details/{seminar}', 'App\Http\Controllers\Api\SeminarsController@getseminardata');
+Route::post('/seminars/{seminar}/finalize', 'App\Http\Controllers\Api\SeminarsController@finalizeseminar');
 Route::post('/ratings/add', 'App\Http\Controllers\Api\RatingsController@addratings');
 Route::get('/seminars/{id_seminar}/stars', 'App\Http\Controllers\Api\RatingsController@getseminarstars');
 Route::get ('/user/{id_seminar}/stars', 'App\Http\Controllers\Api\RatingsController@getuserstars');
@@ -54,3 +55,5 @@ Route::post('/user/changepassword', 'App\Http\Controllers\Api\UserController@cha
 Route::put('/user/editprofile', 'App\Http\Controllers\Api\UserController@editprofile');
 Route::post('/seminars/{seminar}/edit', 'App\Http\Controllers\Api\SeminarsController@editseminar');
 
+Route::post('/sertifikat/generate/{seminar}', 'App\Http\Controllers\Api\SertifikatController@generatesertifikat');
+Route::post('/sertifikat/show', 'App\Http\Controllers\Api\SertifikatController@showsertifikatdatafromkode');
