@@ -93,6 +93,32 @@
 }
 ```
 
+## Update Data
+* URL
+    - ```/user/editprofile```
+* Method
+    - POST
+* Headers
+    - ``Authorization`` : ``Bearer <token>``
+* Request Body
+    - ``name``
+    - ``no_hp``
+    - ``no_KTP``
+    - ``alamat``
+* Response
+```json
+{
+    "success": false,
+    "message": "No KTP Tidak Boleh Kosong"
+}
+
+{
+    "success": true,
+    "message": "Profile Berhasil Diubah"
+}
+```
+
+
 ## ShowUserData
 * URL
     - ```/user```

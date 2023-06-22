@@ -53,4 +53,31 @@ class UserController extends Controller
             'message' => 'Password Berhasil Diubah',
         ], 200);
     }
+
+    public function editprofile (Request $request) {
+        $user = auth()->guard('api')->user();
+
+        //if no_ktp null return error
+        if ($request->no_KTP == null) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No KTP Tidak Boleh Kosong',
+            ], 401);
+        }
+        $validatedData = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'no_KTP' => ['required', 'string', 'max:255'],
+            'no_hp' => ['required', 'string', 'max:255'],
+            'alamat' => ['required', 'string', 'max:255'],
+        ]);
+        $user->name = $validatedData['name'];
+        $user->no_KTP = $validatedData['no_KTP'];
+        $user->no_hp = $validatedData['no_hp'];
+        $user->alamat = $validatedData['alamat'];
+        $user->save();
+        return response()->json([
+            'success' => true,
+            'message' => 'Profile Berhasil Diubah',
+        ], 200);
+    }
 }
