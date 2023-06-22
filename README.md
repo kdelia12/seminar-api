@@ -66,6 +66,33 @@
 }
 ```
 
+## Change Password
+* URL
+    - ```user/changepassword```
+* Method
+    - POST
+* Headers
+    - ``Authorization`` : ``Bearer <token>``
+* Request Body
+    - ``old_password``
+    - ``new_password``
+    - ``new_password_confirmation``
+* Response
+```json
+{
+    "success": false,
+    "message": "Password Lama Tidak Sesuai"
+}
+{
+    "success": false,
+    "message": "Password Baru Tidak Sesuai"
+}
+{
+    "success": true,
+    "message": "Password Berhasil Diubah"
+}
+```
+
 ## ShowUserData
 * URL
     - ```/user```
@@ -277,6 +304,27 @@
     - GET
 * Headers
     - ``Authorization`` : ``Bearer <token>``
+* Request Body
+    - ``id_seminar`` 
+    - ``stars``
+    - ``review``
+* Response
+```json
+{
+    "average_rating": 5
+}
+```
+## Add Review
+* URL
+    - ```/ratings/add```
+* Method
+    - GET
+* Headers
+    - ``Authorization`` : ``Bearer <token>``
+* Request Body
+    - ``id_seminar`` 
+    - ``stars``
+    - ``review``
 * Response
 ```json
 {
