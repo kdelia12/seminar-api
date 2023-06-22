@@ -14,15 +14,15 @@
     "user": {
         "id": 9,
         "name": "Wildan",
-        "email": "eweeweewe@ewe.com",
+        "email": "email@email.com",
         "email_verified_at": null,
-        "no_hp": "0812628265434",
+        "no_hp": "no hape",
         "role": "admin",
         "created_at": "2023-06-15T12:48:56.000000Z",
         "updated_at": "2023-06-15T13:11:14.000000Z",
         "seminar_applied": "[2, 1]"
     },
-    "token": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vd2FscnVzLWFwcC1lbHByOC5vbmRpZ2l0YWxvY2Vhbi5hcHAvYXBpL2xvZ2luIiwiaWF0IjoxNjg2ODM3NzExLCJleHAiOjE2ODY4NDEzMTEsIm5iZiI6MTY4NjgzNzcxMSwianRpIjoiNlRzZmZZeWRGYzlhNXJ2cSIsInN1YiI6IjkiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.VRYeWQEZyTLC0UNrgJJtftF2I9I8hHuQ21TWbpRtk28"
+    "token": "$Token"
 }
 ```
 ## Register
@@ -52,7 +52,7 @@
 ```
 ## Logout
 * URL
-    - ```logout```
+    - ```/logout```
 * Method
     - POST
 * Headers
@@ -61,14 +61,14 @@
 * Response
 ```json
 {
-    "success": false,
-    "message": "Token Sudah Tidak Berlaku!"
+    "success": True,
+    "message": "Success Logout!"
 }
 ```
 
 ## ShowUserData
 * URL
-    - ```user```
+    - ```/user```
 * Method
     - POST
 * Headers
@@ -101,16 +101,13 @@
 ```json
 {
         "id": 2,
-        "name": "Seminar Sek dan Ewe",
-        "short_description": "Tentang Sek dan Ewe",
+        "name": "Seminar Javascript dan SQL",
+        "short_description": "Tentang Javascript dan SQL",
         "full_description": null,
-        "speaker": null,
-        "participants": "[2, 3, 1]",
-        "participant_count": 3,
-        "quota": 3,
         "date_and_time": "2023-07-27 20:00:00",
-        "updated_at": "2023-04-27T14:30:27.000000Z",
-        "created_at": null
+        "quota": 10,
+        "participant_count": 4,
+        "speaker": "Ridwan Solar"
 }
 ```
 
@@ -122,17 +119,20 @@
 * Response
 ```json
 {
-        "id": 2,
-        "name": "Seminar Sek dan Ewe",
-        "short_description": "Tentang Sek dan Ewe",
-        "full_description": null,
-        "speaker": null,
-        "participants": "[2, 3, 1]",
-        "participant_count": 3,
-        "quota": 3,
-        "date_and_time": "2023-03-27 20:00:00",
-        "updated_at": "2023-04-27T14:30:27.000000Z",
-        "created_at": null
+        "id": 12,
+        "name": "Mabar Sekuy",
+        "short_description": "Anjay Mabar",
+        "full_description": "Mari kita mabar lah gaskan cuyy",
+        "speaker": "Mabar kun",
+        "participants": null,
+        "category": "Gaming",
+        "lokasi": null,
+        "alamat": null,
+        "participant_count": null,
+        "quota": 102,
+        "date_and_time": "2023-06-01 23:52:00",
+        "updated_at": "2023-06-21T16:53:00.000000Z",
+        "created_at": "2023-06-21T16:53:00.000000Z"
 }
 ```
 ## Get Seminar Applied by user
@@ -145,14 +145,13 @@
 * Response
 ```json
 {
-    "seminars": [
+"seminars": [
         {
             "seminar_id": 2,
-            "seminar_name": "Seminar Sek dan Ewe"
-        },
-        {
-            "seminar_id": 1,
-            "seminar_name": "Seminar Segs dan Ewe"
+            "seminar_name": "Seminar Javascript dan SQL",
+            "seminar_shortdesc": "Tentang Javascript dan SQL",
+            "seminar_speaker": "Ridwan Solar",
+            "seminar_date": "2023-07-27 20:00:00"
         }
     ]
 }
@@ -168,13 +167,13 @@
 * Response
 ```json
 {
-    "message": "Anda belum mendaftar"
+    "message": "Anda Sudah Mendaftar"
 }
 ```
 
 ## Add Seminar
 * URL
-    - ```/startsleep```
+    - ```/seminars```
 * Method
     - POST
 * Headers
@@ -186,6 +185,9 @@
     - ``speaker``
     - ``quota``
     - ``date_and_time`` (YYYY-MM-DD HH-MM-SS)
+    - ``lokasi`` (Offline/Online)
+    - ``alamat``
+    - ``category``
 * Response
 ```json
 {
@@ -223,7 +225,7 @@
 
 ## Get Seminar Participant data
 * URL
-    - ```/seminars/{idseminar}/check```
+    - ```/seminars/{idseminar}```
 * Method
     - GET
 * Headers
@@ -251,5 +253,33 @@
             "participant_phone": "0812628265434"
         }
     ]
+}
+```
+
+## Get Seminar average rating
+* URL
+    - ```/seminars/{idseminar}/stars```
+* Method
+    - GET
+* Headers
+    - ``Authorization`` : ``Bearer <token>``
+* Response
+```json
+{
+    "average_rating": 5
+}
+```
+
+## Add Review
+* URL
+    - ```/ratings/add```
+* Method
+    - GET
+* Headers
+    - ``Authorization`` : ``Bearer <token>``
+* Response
+```json
+{
+    "average_rating": 5
 }
 ```

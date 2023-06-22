@@ -12,25 +12,25 @@ use App\Models\Ratings;
 class RatingsController extends Controller {
     Public function addratings (Request $request) {
         $user = auth()->guard('api')->user();
+        $seminar_applied = $user->seminar_applied;
         $check = Ratings::where('id_user', $user->id)->where('id_seminar', $request->id_seminar)->first();
         if ($check) {
             return response()->json(['error' => 'User Sudah Memberi Rating'], 401);
         }
         //if user didnt apply fot that seminar user cant give comment
-        $check2 = User::whereJsonContains('seminar_applied->id_seminar', $request->id_seminar)->first();
-        if (!$check2) {
+        if (!$seminar_applied->contains($request->id_seminar)) {
             return response()->json(['error' => 'User Belum Mengikuti Seminar'], 401);
         }
         $validatedData = $request->validate([
             'id_seminar' => ['required', 'integer'],
             'stars' => ['required', 'integer'],
-            'comment' => ['required', 'string'],
+            'review' => ['required', 'string'],
         ]);
         $ratings = Ratings::create([
             'id_user' => $user->id,
             'id_seminar' => $validatedData['id_seminar'],
             'stars' => $validatedData['stars'],
-            'comment' => $validatedData['comment'],
+            'comment' => $validatedData['review'],
         ]);
         return response()->json($ratings, 201);
     }
