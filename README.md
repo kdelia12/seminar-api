@@ -248,7 +248,35 @@
 }
 ```
 
-## Add Seminar
+## Update Seminar
+* URL
+    - ```seminars/{seminarid}/edit```
+* Method
+    - PUT
+* Headers
+    - ``Authorization`` : ``Bearer <token>``
+* Request Body
+    - ``name``
+    - ``short_description``
+    - ``full_description``
+    - ``speaker``
+    - ``quota``
+    - ``date_and_time`` (YYYY-MM-DD HH-MM-SS)
+    - ``lokasi`` (Offline/Online)
+    - ``alamat``
+    - ``category``
+* Response
+```json
+{
+    "error": "Unauthorized"
+}
+
+{
+    "message": "Seminar Berhasil diubah"
+}
+```
+
+## apply Seminar
 * URL
     - ```/seminars/{seminarid}/apply```
 * Method

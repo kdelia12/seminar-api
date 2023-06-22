@@ -52,4 +52,5 @@ Route::get('/seminars/{id_seminar}/stars', 'App\Http\Controllers\Api\RatingsCont
 Route::get ('/user/{id_seminar}/stars', 'App\Http\Controllers\Api\RatingsController@getuserstars');
 Route::post('/user/changepassword', 'App\Http\Controllers\Api\UserController@changePassword');
 Route::put('/user/editprofile', 'App\Http\Controllers\Api\UserController@editprofile');
+Route::post('/seminars/{seminar}/edit', 'App\Http\Controllers\Api\SeminarsController@editseminar');
 

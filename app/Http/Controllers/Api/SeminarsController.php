@@ -204,5 +204,25 @@ public function getseminardata (Seminar $seminar){
 
 }
 
+public function editseminar(Request $request, Seminar $seminar){
+    $user = auth()->guard('api')->user();
+    if (!$user || $user->role !== 'admin') {
+        return response()->json(['error' => 'Unauthorized'], 401);
+    }
+    $validatedData = $request->validate([
+        'name' => ['required', 'string'],
+        'short_description' => ['required', 'string'],
+        'full_description' => ['required', 'string'],
+        'quota' => ['required', 'integer'],
+        'date_and_time' => ['required', 'date'],
+        'speaker' => ['required', 'string'],
+        'category' => ['required', 'string'],
+        'lokasi' => ['required', 'string'],
+    ]);
+    $seminar->update($validatedData);
+    $seminar->alamat = $request->alamat;
+    return response()->json(['message' => 'Seminar Updated'], 200);
+}
+
 
 }
