@@ -50,10 +50,9 @@ class SeminarsController extends Controller
     $imageName = str_replace(' ', '_', $validatedData['name']) . '-' . time() . '.' . $request->image->getClientOriginalExtension();
 
     // Store the image in the "public/seminar" directory
-    $imagePath = $request->file('image')->storePubliclyAs('public/seminar', $imageName);
+    $imagePath = Storage::disk('spaces')->put('seminar', $request->image);
+    $imgurl = Storage::disk('spaces')->url($imagePath);
 
-    // Get the public URL of the stored image
-    $imagePath = Storage::url($imagePath);
 
     // Create a new seminar record with the validated data and image URL
     $seminar = Seminar::create([
@@ -66,7 +65,7 @@ class SeminarsController extends Controller
         'category' => $validatedData['category'],
         'lokasi' => $validatedData['lokasi'],
         'alamat' => $request->input('alamat'),
-        'imgurl' => $imagePath,
+        'imgurl' => $imgurl,
     ]);
 
     return response()->json($seminar, 201);
@@ -148,7 +147,14 @@ public function get_all_seminar_applied(){
         if ($seminar) {
             $seminars[] = [
                 'seminar_id' => $seminarId,
-                'seminar_name' => $seminar->name
+                'seminar_name' => $seminar->name,
+                'seminar_short_description' => $seminar->short_description,
+                'seminar_date' => $seminar->date_and_time,
+                'seminar_speaker' => $seminar->speaker,
+                'seminar_category' => $seminar->category,
+                'seminar_lokasi' => $seminar->lokasi,
+                'seminar_alamat' => $seminar->alamat,
+
             ];
         }
     }
