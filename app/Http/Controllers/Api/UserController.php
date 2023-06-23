@@ -95,12 +95,13 @@ class UserController extends Controller
         }
         $validatedData = $request->validate([
             'tempat_lahir' => ['required', 'string', 'max:255'],
-            'tanggal_lahir' => ['required', 'date'],
+            'date' => ['required', 'date'],
             'alamat' => ['required', 'string', 'max:1000'],
         ]);
         $user->no_KTP = $request->input('no_KTP');
         $user->tempat_lahir = $validatedData['tempat_lahir'];
-        $user->tanggal_lahir = $validatedData['tanggal_lahir'];
+        $user->tanggal_lahir = $validatedData['date'];
+        $user->alamat = $validatedData['alamat'];
         $user->save();
         return response()->json([
             'success' => true,
