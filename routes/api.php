@@ -45,7 +45,7 @@ Route::delete('/seminars/{seminar}', 'App\Http\Controllers\Api\SeminarsControlle
 Route::post('/seminars/{seminar}/apply', 'App\Http\Controllers\Api\SeminarsController@apply');
 Route::get('/seminars/applied', 'App\Http\Controllers\Api\SeminarsController@get_all_seminar_applied');
 Route::get('/seminars/{seminar}', 'App\Http\Controllers\Api\SeminarsController@get_all_seminar_applicant');
-Route::get('/seminars/{seminar}/check', 'App\Http\Controllers\Api\SeminarsController@check_apply');
+Route::post('/seminars/{seminar}/check', 'App\Http\Controllers\Api\SeminarsController@check_apply');
 Route::get('/seminars/details/{seminar}', 'App\Http\Controllers\Api\SeminarsController@getseminardata');
 Route::post('/seminars/{seminar}/finalize', 'App\Http\Controllers\Api\SeminarsController@finalizeseminar');
 Route::post('/ratings/add', 'App\Http\Controllers\Api\RatingsController@addratings');
@@ -57,3 +57,6 @@ Route::post('/seminars/{seminar}/edit', 'App\Http\Controllers\Api\SeminarsContro
 
 Route::post('/sertifikat/generate/{seminar}', 'App\Http\Controllers\Api\SertifikatController@generatesertifikat');
 Route::post('/sertifikat/show', 'App\Http\Controllers\Api\SertifikatController@showsertifikatdatafromkode');
+
+Route::post('user/update', 'App\Http\Controllers\Api\UserController@pembaruanberkas');
+Route::post ('/seminars/{seminar}/cancel', 'App\Http\Controllers\Api\SeminarsController@cancelapply');

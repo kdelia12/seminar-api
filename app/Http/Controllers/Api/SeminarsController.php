@@ -265,4 +265,33 @@ public function finalizeseminar (Seminar $seminar){
     $seminar->save();
     return response()->json(['message' => 'Seminar Berhasil Di finalisasi'], 200);
 }
+
+public function cancelapply (Seminar $seminar){
+    $user = auth()->guard('api')->user();
+    $participants = json_decode($seminar->participants, true) ?? [];
+    $user = auth()->guard('api')->user();
+    if (!$user) {
+        return response()->json(['error' => 'Unauthorized'], 401);
+    }
+    if (!in_array($user->id, $participants)) {
+        return response()->json(['message' => 'Anda Belum Mendaftar'], 200);
+    }
+    $key = array_search($user->id, $participants);
+    unset($participants[$key]);
+    $participants = array_values($participants);
+    $user = User::find($user->id);
+    $seminar->update([
+        'participants' => json_encode($participants),
+        'participant_count' => count($participants)
+    ]);
+    $seminarlist = json_decode($user->seminar_applied, true) ?? [];
+    $key = array_search($seminar->id, $seminarlist);
+    unset($seminarlist[$key]);
+    $seminarlist = array_values($seminarlist);
+    $user->update([
+        'seminar_applied' => json_encode($seminarlist)
+    ]);
+    return response()->json(['message' => 'Seminar Dibatalkan'], 200);
+
+}
 }

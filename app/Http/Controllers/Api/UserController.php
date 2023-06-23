@@ -81,4 +81,27 @@ class UserController extends Controller
             'message' => 'Profile Berhasil Diubah',
         ], 200);
     }
+    public function pembaruanberkas (Request $request){
+        $user = auth()->guard('api')->user();
+        if ($request->no_KTP == null) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No KTP Tidak Boleh Kosong',
+            ], 401);
+        }
+        $validatedData = $request->validate([
+            'no_KTP' => ['required', 'string', 'max:255'],
+            'tempat_lahir' => ['required', 'string', 'max:255'],
+            'tanggal_lahir' => ['required', 'date'],
+            'alamat' => ['required', 'string', 'max:1000'],
+        ]);
+        $user->no_KTP = $validatedData['no_KTP'];
+        $user->tempat_lahir = $validatedData['tempat_lahir'];
+        $user->tanggal_lahir = $validatedData['tanggal_lahir'];
+        $user->save();
+        return response()->json([
+            'success' => true,
+            'message' => 'Berkas Berhasil Diperbarui',
+        ], 200);
+    }
 }
