@@ -66,8 +66,8 @@ class UserController extends Controller
         }
         $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'email' => ['string', 'email', 'max:255'],
             'no_KTP' => ['required', 'string', 'max:255'],
-            'no_hp' => ['required', 'string', 'max:255'],
         ]);
     
         $user->name = $validatedData['name'];
@@ -83,6 +83,10 @@ class UserController extends Controller
     }
     public function pembaruanberkas (Request $request){
         $user = auth()->guard('api')->user();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
         if ($request->no_KTP == null) {
             return response()->json([
                 'success' => false,
@@ -90,12 +94,11 @@ class UserController extends Controller
             ], 401);
         }
         $validatedData = $request->validate([
-            'no_KTP' => ['required', 'string', 'max:255'],
             'tempat_lahir' => ['required', 'string', 'max:255'],
             'tanggal_lahir' => ['required', 'date'],
             'alamat' => ['required', 'string', 'max:1000'],
         ]);
-        $user->no_KTP = $validatedData['no_KTP'];
+        $user->no_KTP = $request->input('no_KTP');
         $user->tempat_lahir = $validatedData['tempat_lahir'];
         $user->tanggal_lahir = $validatedData['tanggal_lahir'];
         $user->save();
