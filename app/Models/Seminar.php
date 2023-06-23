@@ -18,6 +18,7 @@ class Seminar extends Model
         'category',
         'lokasi',
         'alamat',
+        'imgurl'
 
     ];
 }

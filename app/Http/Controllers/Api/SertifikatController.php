@@ -59,6 +59,7 @@ class SertifikatController extends Controller {
         $seminarspeaker = $seminar->speaker;
 
         return response()->json([
+            'kode_sertifikat' => $kodesertifikat,
             'nama' => $nama,
             'seminarname' => $seminarname,
             'seminardate' => $seminardate,

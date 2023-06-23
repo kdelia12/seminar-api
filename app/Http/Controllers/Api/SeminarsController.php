@@ -6,6 +6,7 @@ use App\Models\Seminar;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class SeminarsController extends Controller
 {
@@ -26,29 +27,50 @@ class SeminarsController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $user = auth()->guard('api')->user();
-    
-        if (!$user || $user->role !== 'admin') {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-    
-        $validatedData = $request->validate([
-            'name' => ['required', 'string'],
-            'short_description' => ['required', 'string'],
-            'full_description' => ['required', 'string'],
-            'quota' => ['required', 'integer'],
-            'date_and_time' => ['required', 'date'],
-            'speaker' => ['required', 'string'],
-            'category' => ['required', 'string'],
+{
+    $user = auth()->guard('api')->user();
 
-        ]);
-    
-        $seminar = Seminar::create($validatedData);
-    
-        return response()->json($seminar, 201);
+    if (!$user || $user->role !== 'admin') {
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
 
+    $validatedData = $request->validate([
+        'name' => ['required', 'string'],
+        'short_description' => ['required', 'string'],
+        'full_description' => ['required', 'string'],
+        'quota' => ['required', 'integer'],
+        'date_and_time' => ['required', 'date'],
+
+        'category' => ['required', 'string'],
+        'lokasi' => ['required', 'string'],
+        'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+    ]);
+
+    // Generate a unique name for the image file
+    $imageName = str_replace(' ', '_', $validatedData['name']) . '-' . time() . '.' . $request->image->getClientOriginalExtension();
+
+    // Store the image in the "public/seminar" directory
+    $imagePath = $request->file('image')->storePubliclyAs('public/seminar', $imageName);
+
+    // Get the public URL of the stored image
+    $imagePath = Storage::url($imagePath);
+
+    // Create a new seminar record with the validated data and image URL
+    $seminar = Seminar::create([
+        'name' => $validatedData['name'],
+        'short_description' => $validatedData['short_description'],
+        'full_description' => $validatedData['full_description'],
+        'quota' => $validatedData['quota'],
+        'date_and_time' => $request->input('date_and_time'),
+        'speaker' => $request->input('speaker'),
+        'category' => $validatedData['category'],
+        'lokasi' => $validatedData['lokasi'],
+        'alamat' => $request->input('alamat'),
+        'imgurl' => $imagePath,
+    ]);
+
+    return response()->json($seminar, 201);
+}
     public function destroy(Seminar $seminar)
     {
         $user = auth()->guard('api')->user();
@@ -96,9 +118,10 @@ class SeminarsController extends Controller
         'participants' => json_encode($participants),
         'participant_count' => count($participants)
     ]);
-    
+    $seminarlist = json_decode($user->seminar_applied, true) ?? [];
+    $seminarlist[] = $seminar->id;
     $user->update([
-        'seminar_applied' => json_encode($seminar->id)
+        'seminar_applied' => json_encode($seminarlist)
     ]);
     
     return response()->json(['message' => 'Seminar Applied'], 200);
@@ -115,15 +138,9 @@ public function get_all_seminar_applied(){
     if (!$user) {
         return response()->json(['error' => 'User not found'], 404);
     }
+
     // Retrieve the applied seminar data from the user's record
     $seminar_applied = json_decode($user->seminar_applied, true);
-
-    // Check if the seminar data is empty
-    if (!$seminar_applied) {
-        return response()->json(['message' => 'No seminar data found'], 200);
-    }
-
-
     // $seminar_name = Seminar::find($seminar_applied)->name;
     $seminars = [];
     foreach ($seminar_applied as $seminarId) {
@@ -131,17 +148,20 @@ public function get_all_seminar_applied(){
         if ($seminar) {
             $seminars[] = [
                 'seminar_id' => $seminarId,
-                'seminar_name' => $seminar->name,
-                'seminar_shortdesc' => $seminar->short_description,
-                'seminar_speaker' => $seminar->speaker,
-                'seminar_date' => $seminar->date_and_time,
+                'seminar_name' => $seminar->name
             ];
         }
+    }
+
+    // Check if the seminar data is empty
+    if (!$seminar_applied) {
+        return response()->json(['message' => 'No seminar data found'], 200);
     }
 
     // Return the seminar data as a JSON response
     return response()->json(['seminars' => $seminars], 200);
 }
+
 
 public function get_all_seminar_applicant(Seminar $seminar){
     // Retrieve the user ID from the bearer token
