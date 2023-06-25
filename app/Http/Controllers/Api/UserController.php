@@ -55,12 +55,20 @@ class UserController extends Controller
     }
     public function editprofile(Request $request)
     {
+
         $user = auth()->guard('api')->user();
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
-        $user->no_hp= $request->input('no_hp');
+        //only save the data that is filled ( not null)
+        if ($request->name != null) {
+            $user->name = $request->input('name');
+        }
+        if ($request->email != null) {
+            $user->email = $request->input('email');
+        }
+        if ($request->no_hp != null) {
+            $user->no_hp = $request->input('no_hp');
+        }
         $user->save();
-    
+
         return response()->json([
             'success' => true,
             'message' => 'Profile Berhasil Diubah',
