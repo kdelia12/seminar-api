@@ -40,18 +40,17 @@ class SeminarsController extends Controller
         'full_description' => ['required', 'string'],
         'quota' => ['required', 'integer'],
         'date_and_time' => ['required', 'date'],
-
         'category' => ['required', 'string'],
         'lokasi' => ['required', 'string'],
-        'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+        // 'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
     ]);
 
-    // Generate a unique name for the image file
-    $imageName = str_replace(' ', '_', $validatedData['name']) . '-' . time() . '.' . $request->image->getClientOriginalExtension();
+    // // Generate a unique name for the image file
+    // $imageName = str_replace(' ', '_', $validatedData['name']) . '-' . time() . '.' . $request->image->getClientOriginalExtension();
 
-    // Store the image in the "public/seminar" directory
-    $imagePath = Storage::disk('spaces')->put('seminar', $request->image);
-    $imgurl = Storage::disk('spaces')->url($imagePath);
+    // // Store the image in the "public/seminar" directory
+    // $imagePath = Storage::disk('spaces')->put('seminar', $request->image);
+    // $imgurl = Storage::disk('spaces')->url($imagePath);
 
 
     // Create a new seminar record with the validated data and image URL
@@ -65,7 +64,6 @@ class SeminarsController extends Controller
         'category' => $validatedData['category'],
         'lokasi' => $validatedData['lokasi'],
         'alamat' => $request->input('alamat'),
-        'imgurl' => $imgurl,
     ]);
 
     return response()->json($seminar, 201);
