@@ -56,24 +56,9 @@ class UserController extends Controller
     public function editprofile(Request $request)
     {
         $user = auth()->guard('api')->user();
-    
-        //if no_ktp null return error
-        if ($request->no_KTP == null) {
-            return response()->json([
-                'success' => false,
-                'message' => 'No KTP Tidak Boleh Kosong',
-            ], 401);
-        }
-        $validatedData = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['string', 'email', 'max:255'],
-            'no_KTP' => ['required', 'string', 'max:255'],
-        ]);
-    
-        $user->name = $validatedData['name'];
-        $user->no_KTP = $validatedData['no_KTP'];
-        $user->no_hp = $validatedData['no_hp'];
-        $user->alamat = $request->input('alamat');
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->no_hp= $request->input('no_hp');
         $user->save();
     
         return response()->json([
