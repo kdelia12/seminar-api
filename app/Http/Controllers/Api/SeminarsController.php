@@ -7,10 +7,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
-use Carbon\Carbon;
-
-// Set the timezone to GMT+7
-
 
 class SeminarsController extends Controller
 {
@@ -18,15 +14,14 @@ class SeminarsController extends Controller
     {
         // $seminars = Seminar::where('date_and_time', '>', now())->get();
         //take all seminars without participants data with time gmt+7
-        $now = Carbon::now('GMT+7');
-        $seminars = Seminar::where('date_and_time', '>', $now())->get();
+        $seminars = Seminar::where('date_and_time', '>', now())->get();
 
         return response()->json($seminars, 200);
     }
 
     public function past_seminar()
     {
-        $seminars = Seminar::where('date_and_time', '<', $now())->get();
+        $seminars = Seminar::where('date_and_time', '<', now())->get();
 
         return response()->json($seminars, 200);
     }
