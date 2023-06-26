@@ -180,7 +180,7 @@ public function get_all_seminar_applicant(Seminar $seminar){
         return response()->json(['error' => 'Unauthorized'], 401);
     }
 
-    
+    $seminar = Seminar::find($seminar->id);
     $participants = json_decode($seminar->participants, true) ?? [];
     $applicants =[];
     foreach ($participants as $participantId) {
@@ -189,13 +189,16 @@ public function get_all_seminar_applicant(Seminar $seminar){
             $applicants[] = [
                 'participant_id' => $participantId,
                 'participant_name' => $participant->name,
+                'participant_email' => $participant->email,
+                'participant_instansi' => $participant->instansi,
+                'participant_fakultas' => $participant->fakultas,
+                'participant_posisi' => $participant->posisi,
                 'participant_phone' => $participant->no_hp,
             ];
         }
     }
-    return response()->json(['applicants' => $applicants], 200);
+    return response()->json(['nama_seminar'=> $seminar->name,'applicants' => $applicants], 200);
 }
-
 public function check_apply(Seminar $seminar ){
 
     $user = auth()->guard('api')->user();
