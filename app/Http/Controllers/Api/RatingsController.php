@@ -14,11 +14,11 @@ class RatingsController extends Controller {
         $user = auth()->guard('api')->user();
         $seminar_applied = $user->seminar_applied;
         $check = Ratings::where('id_user', $user->id)->where('id_seminar', $request->id_seminar)->first();
+        $seminar_applied = json_decode($seminar_applied, true)?? [];
         if ($check) {
             return response()->json(['error' => 'User Sudah Memberi Rating'], 401);
         }
-        //if user didnt apply fot that seminar user cant give comment
-        if (!$seminar_applied->contains($request->id_seminar)) {
+        if (!in_array($request->id_seminar, $seminar_applied)) {
             return response()->json(['error' => 'User Belum Mengikuti Seminar'], 401);
         }
         $validatedData = $request->validate([
