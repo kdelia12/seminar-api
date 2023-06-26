@@ -14,7 +14,7 @@ class SeminarsController extends Controller
     {
         // $seminars = Seminar::where('date_and_time', '>', now())->get();
         //take all seminars without participants data
-        $seminars = Seminar::where('date_and_time', '>', now())->select('id', 'name', 'short_description', 'full_description', 'date_and_time', 'quota', 'participant_count', 'speaker')->get();
+        $seminars = Seminar::where('date_and_time', '>', now())->select('id', 'name', 'short_description', 'full_description', 'date_and_time', 'quota', 'participant_count', 'speaker', 'category')->get();
 
         return response()->json($seminars, 200);
     }
@@ -233,18 +233,35 @@ public function editseminar(Request $request, Seminar $seminar){
     if (!$user || $user->role !== 'admin') {
         return response()->json(['error' => 'Unauthorized'], 401);
     }
-    $validatedData = $request->validate([
-        'name' => ['required', 'string'],
-        'short_description' => ['required', 'string'],
-        'full_description' => ['required', 'string'],
-        'quota' => ['required', 'integer'],
-        'date_and_time' => ['required', 'date'],
-        'speaker' => ['required', 'string'],
-        'category' => ['required', 'string'],
-        'lokasi' => ['required', 'string'],
-    ]);
-    $seminar->update($validatedData);
-    $seminar->alamat = $request->alamat;
+    //only save those who request are filled
+    if ($request->name) {
+        $seminar->name = $request->name;
+    }
+    if ($request->short_description) {
+        $seminar->short_description = $request->short_description;
+    }
+    if ($request->full_description) {
+        $seminar->full_description = $request->full_description;
+    }
+    if ($request->quota) {
+        $seminar->quota = $request->quota;
+    }
+    if ($request->date_and_time) {
+        $seminar->date_and_time = $request->date_and_time;
+    }
+    if ($request->speaker) {
+        $seminar->speaker = $request->speaker;
+    }
+    if ($request->category) {
+        $seminar->category = $request->category;
+    }
+    if ($request->lokasi) {
+        $seminar->lokasi = $request->lokasi;
+    }
+    if ($request->alamat) {
+        $seminar->alamat = $request->alamat;
+    }
+    $seminar->save();
     return response()->json(['message' => 'Seminar Updated'], 200);
 }
 

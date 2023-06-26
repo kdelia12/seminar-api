@@ -17,8 +17,7 @@ class Seminar extends Model
         'speaker',
         'category',
         'lokasi',
-        'alamat',
-        'imgurl'
+        'alamat'
 
     ];
 }
