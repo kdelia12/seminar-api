@@ -7,6 +7,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
+
 
 class SeminarsController extends Controller
 {
@@ -14,14 +17,16 @@ class SeminarsController extends Controller
     {
         // $seminars = Seminar::where('date_and_time', '>', now())->get();
         //take all seminars without participants data with time gmt+7
-        $seminars = Seminar::where('date_and_time', '>', now())->get();
+        $date = Carbon::now('Asia/Bangkok')->format('Y-m-d H:i:s');
+        $seminars = Seminar::where('date_and_time', '>', $date)->get();
 
         return response()->json($seminars, 200);
     }
 
     public function past_seminar()
     {
-        $seminars = Seminar::where('date_and_time', '<', now())->get();
+        $date = Carbon::now('Asia/Bangkok')->format('Y-m-d H:i:s');
+        $seminars = Seminar::where('date_and_time', '<', $date)->get();
 
         return response()->json($seminars, 200);
     }
