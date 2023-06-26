@@ -63,6 +63,7 @@ class SertifikatController extends Controller {
             'nama' => $nama,
             'seminarname' => $seminarname,
             'seminardate' => $seminardate,
+            'id_seminar' => $seminar->id,
             'seminarspeaker' => $seminarspeaker,
             'message' => 'Sertifikat Valid',
         ], 200);
@@ -82,6 +83,7 @@ class SertifikatController extends Controller {
             $seminarData[] = [
                 'seminarname' => $seminar->name,
                 'seminardate' => $seminar->date_and_time,
+                'id_seminar' => $seminar->id,
                 'seminarspeaker' => $seminar->speaker,
                 'kode_sertifikat' => $sertifikats->kode_sertifikat,
             ];
