@@ -60,3 +60,4 @@ Route::post('/sertifikat/show', 'App\Http\Controllers\Api\SertifikatController@s
 
 Route::post('user/update', 'App\Http\Controllers\Api\UserController@pembaruanberkas');
 Route::post ('/seminars/{seminar}/cancel', 'App\Http\Controllers\Api\SeminarsController@cancelapply');
+Route::get ('/user/sertifikat', 'App\Http\Controllers\Api\SertifikatController@getsertifikatfromuser');

@@ -67,4 +67,16 @@ class SertifikatController extends Controller {
             'message' => 'Sertifikat Valid',
         ], 200);
     }
+
+    public function getsertifikatfromuser(){
+        $user = auth()->guard('api')->user();
+        $sertifikat = Sertifikat::where('id_user', $user->id)->get();
+        if (!$sertifikat) {
+            return response()->json(['error' => 'User Belum Generate Sertifikat'], 401);
+        }
+        return response()->json([
+            'message' => 'Sertifikat data generated',
+            'data' => $sertifikat,
+        ], 201);
+    }
 }
