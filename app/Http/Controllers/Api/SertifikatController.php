@@ -74,9 +74,23 @@ class SertifikatController extends Controller {
         if (!$sertifikat) {
             return response()->json(['error' => 'User Belum Generate Sertifikat'], 401);
         }
+        $seminarData = [];
+        foreach ($sertifikat as $sertifikats) {
+            $id = $sertifikats->id_seminar;
+            $seminar = Seminar::where('id', $id)->first();
+        
+            $seminarData[] = [
+                'seminarname' => $seminar->name,
+                'seminardate' => $seminar->date_and_time,
+                'seminarspeaker' => $seminar->speaker,
+                'kode_sertifikat' => $sertifikats->kode_sertifikat,
+            ];
+        }
+        
         return response()->json([
-            'message' => 'Sertifikat data generated',
-            'data' => $sertifikat,
-        ], 201);
+            'nama' => $user->name,
+            'email' => $user->email,
+            'seminardata' => $seminarData,
+        ], 200);
     }
 }
