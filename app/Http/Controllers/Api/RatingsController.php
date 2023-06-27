@@ -53,5 +53,12 @@ class RatingsController extends Controller {
         $averageRating = $ratings->avg('stars');
         return response()->json(['average_rating' => $averageRating], 200);
     }
+
+    public function getseminarfeedback(Request $request, $id_seminar)
+    {
+        $ratings = Ratings::where('id_seminar', $id_seminar)->get();
+        $feedback = $ratings->pluck('comment');
+        return response()->json(['feedback' => $feedback], 200);
+    }
 }
 

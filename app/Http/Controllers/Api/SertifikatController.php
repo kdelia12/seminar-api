@@ -16,6 +16,9 @@ class SertifikatController extends Controller {
 
     public function generatesertifikat(Seminar $seminar){
         $user = auth()->guard('api')->user();
+        if (!auth()->guard('api')->check()) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
         $seminar_applied = json_decode($user->seminar_applied, true)?? [];
         if (!in_array($seminar->id, $seminar_applied)) {
             return response()->json(['error' => 'User Belum Mengikuti Seminar'], 401);
@@ -40,9 +43,7 @@ class SertifikatController extends Controller {
             'data' => $sertifikat,
         ], 201);
     }
-
     public function showsertifikatdatafromkode (Request $request){
-        $user = auth()->guard('api')->user();
         $kodesertifikat = $request->kode_sertifikat;
         $sertifikat = Sertifikat::where('kode_sertifikat', $kodesertifikat)->first();
         if (!$sertifikat) {
@@ -64,28 +65,21 @@ class SertifikatController extends Controller {
             'seminarname' => $seminarname,
             'seminardate' => $seminardate,
             'id_seminar' => $seminar->id,
-            'seminarspeaker' => $seminarspeaker,
-            'message' => 'Sertifikat Valid',
         ], 200);
     }
 
     public function getsertifikatfromuser(){
         $user = auth()->guard('api')->user();
-        $sertifikat = Sertifikat::where('id_user', $user->id)->get();
-        if (!$sertifikat) {
-            return response()->json(['error' => 'User Belum Generate Sertifikat'], 401);
-        }
+        $seminarfinalizedappliedbyuser = Seminar::where('finalized', 'Y')->where('participants', 'like', '%'.$user->id.'%')->get();
         $seminarData = [];
-        foreach ($sertifikat as $sertifikats) {
-            $id = $sertifikats->id_seminar;
-            $seminar = Seminar::where('id', $id)->first();
-        
+        foreach ($seminarfinalizedappliedbyuser as $seminar) {
             $seminarData[] = [
+                'id_seminar' => $seminar->id,
                 'seminarname' => $seminar->name,
                 'seminardate' => $seminar->date_and_time,
-                'id_seminar' => $seminar->id,
                 'seminarspeaker' => $seminar->speaker,
-                'kode_sertifikat' => $sertifikats->kode_sertifikat,
+                'finalized' => $seminar->finalized,
+                'seminar_applied' => $seminar->seminar_applied,
             ];
         }
         
@@ -93,6 +87,31 @@ class SertifikatController extends Controller {
             'nama' => $user->name,
             'email' => $user->email,
             'seminardata' => $seminarData,
+        ], 200);
+    }
+
+    public function isgenerated(){
+        $user = auth()->guard('api')->user();
+        $id_seminar = request('id_seminar');
+        //nama seminar and tanggalseminar from table seminar
+        $seminar = Seminar::where('id', $id_seminar)->first();
+        $seminarname = $seminar->name;
+        $seminardate = $seminar->date_and_time;
+        $check = Sertifikat::where('id_user', $user->id)->where('id_seminar', $id_seminar)->first();
+        $sertifikatdata = [
+            'nama' => $user->name,
+            'email' => $user->email,
+            'seminarname' => $seminarname,
+            'seminardate' => $seminardate,
+            'kode_sertifikat' => $check->kode_sertifikat,
+            'id_seminar' => $id_seminar,
+        ];
+        if (!$check) {
+            return response()->json(['error' => 'User Belum Generate Sertifikat'], 401);
+        }
+        return response()->json([
+            'message' => 'Sertifikat Sudah Digenerate',
+            'data' => $sertifikatdata,
         ], 200);
     }
 }
