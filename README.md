@@ -1,3 +1,11 @@
+## HOW TO INSTALL
+* Clone this repository
+* Run ``composer install``
+* Run ``php artisan key:generate``
+* Run ``php artisan migrate``
+* Run ``php artisan db:seed``
+* Run ``php artisan serve``
+
 ## Login
 
 * URL

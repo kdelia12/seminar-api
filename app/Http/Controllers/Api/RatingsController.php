@@ -57,8 +57,20 @@ class RatingsController extends Controller {
     public function getseminarfeedback(Request $request, $id_seminar)
     {
         $ratings = Ratings::where('id_seminar', $id_seminar)->get();
-        $feedback = $ratings->pluck('comment');
-        return response()->json(['feedback' => $feedback], 200);
+        $id_user = $ratings->pluck('id_user');
+        $user = User::whereIn('id', $id_user)->get();
+        $name = $user->pluck('name');
+        $stars = $ratings->pluck('stars');
+        $feedback= $ratings->pluck('comment');
+        $datafeedback = [];
+        for ($i=0; $i < count($name); $i++) { 
+            $datafeedback[$i] = [
+                'name' => $name[$i],
+                'stars' => $stars[$i],
+                'feedback' => $feedback[$i],
+            ];
+        }
+        return response()->json(['feedback' => $datafeedback], 200);
     }
 }
 
